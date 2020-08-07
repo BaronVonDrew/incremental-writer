@@ -2,6 +2,8 @@ use serde::{Serialize, Deserialize};
 use std::io::{Write, Seek, SeekFrom};
 use std::os::windows::fs::FileExt;
 
+type Result<T> = std::result::Result<T, std::io::Error>;
+
 pub struct IncrementalJsonWriter<T: FileExt + Write + Seek> { 
     buffer: T,
 }
@@ -12,27 +14,22 @@ impl<T: FileExt + Write + Seek> IncrementalJsonWriter<T> {
         }
     }
 
-    pub fn write_element_to_array<U: Serialize>(&mut self, element: &U) {
-        let mut current = self.buffer.seek(SeekFrom::Current(0)).unwrap();
+    pub fn write_element_to_array<U: Serialize>(&mut self, element: &U) -> Result<()> {
+        let mut current = self.buffer.seek(SeekFrom::Current(0))?;
         let mut bytes = vec![];
 
         if current == 0 { 
-            self.write_inital_brackets();
-            current = self.buffer.seek(SeekFrom::Current(0)).unwrap();
+            self.buffer.write(b"[\n\n]")?;
+            current = self.buffer.seek(SeekFrom::Current(0))?;
         } else { 
             bytes.extend(b",\n");
         }
 
-        bytes.extend(serde_json::to_vec_pretty(element).unwrap());
+        bytes.extend(serde_json::to_vec_pretty(element)?);
         bytes.push(b'\n');
         bytes.push(b']');
 
-        self.buffer.seek_write(&bytes, current - 2).unwrap();
-    }
-
-    fn write_inital_brackets(&mut self) { 
-        self.buffer.write(b"[\n").unwrap();
-        self.buffer.write(b"\n]").unwrap();
+        self.buffer.seek_write(&bytes, current - 2).map(|_| ())
     }
 }
 
@@ -61,7 +58,7 @@ fn writer_writes_square_brackets_to_buffer() {
     let mut reader = std::fs::File::open(path).unwrap();
     
     for row in rows.iter().take(2) { 
-        json_writer.write_element_to_array(&row);
+        json_writer.write_element_to_array(&row).unwrap();
     }
     
     let mut buffer = String::new();
@@ -69,7 +66,7 @@ fn writer_writes_square_brackets_to_buffer() {
     assert_eq!(expect_one, buffer);
 
     for row in rows.iter().skip(2).take(2) { 
-        json_writer.write_element_to_array(&row);
+        json_writer.write_element_to_array(&row).unwrap();
     }
     let mut buffer = String::new();
     reader.seek(SeekFrom::Start(0)).unwrap();
