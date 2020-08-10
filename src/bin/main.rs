@@ -1,4 +1,5 @@
-mod incrementaljsonwriter;
+extern crate incrementaljson;
+use incrementaljson::incrementaljsonwriter;
 use serde::{Serialize, Deserialize};
 
 fn main() {
