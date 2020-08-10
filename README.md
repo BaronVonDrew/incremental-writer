@@ -13,7 +13,7 @@ any serialisable object and writes it to the underlying array.
 
 example: 
 
-    use incrementaljsonwriter;
+    use incrementaljsonwriter::IncrementalJsonWriter;
     use serde::{Serialize, Deserialize};
     fn main() {
         let rows: Vec<Record> = vec![0, 1, 2, 3, 4, 5, 6, 7 , 8, 9, 10]
@@ -21,7 +21,7 @@ example:
             .map(|num| Record { name: String::from("Test"), detail: *num})
             .collect();
     let out = std::fs::File::create("test.json").unwrap();
-        let mut writer = incrementaljsonwriter::IncrementalJsonWriter::new(out);
+        let mut writer = IncrementalJsonWriter::new(out);
         for row in rows {
             if row.detail == 8 { 
                 //even though the program panics here, the file output is still
