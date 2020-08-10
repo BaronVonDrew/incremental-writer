@@ -13,7 +13,7 @@ any serialisable object and writes it to the underlying array.
 
 example: 
 
-    mod incrementaljsonwriter;
+    use incrementaljsonwriter;
     use serde::{Serialize, Deserialize};
     fn main() {
         let rows: Vec<Record> = vec![0, 1, 2, 3, 4, 5, 6, 7 , 8, 9, 10]
