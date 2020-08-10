@@ -44,7 +44,6 @@ impl<T: FileExt + Write + Seek> Write for IncrementalJsonWriter<T> {
 
 #[test]
 fn writer_writes_square_brackets_to_buffer() {
-    use super::*;
     use std::io::{Read};
 
     let expect_one = String::from("[\n{\n  \"name\": \"Test\",\n  \"detail\": 0\n},\
