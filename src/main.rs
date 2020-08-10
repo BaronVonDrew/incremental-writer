@@ -1,5 +1,4 @@
 mod incrementaljsonwriter;
-use serde::ser::{Serializer, SerializeSeq};
 use serde::{Serialize, Deserialize};
 
 fn main() {
@@ -8,17 +7,15 @@ fn main() {
         .map(|num| Record { name: String::from("Test"), detail: *num})
         .collect();
 
-    let out = std::io::stdout();
+    let out = std::fs::File::create("test.json").unwrap();
 
-    let mut ser = serde_json::Serializer::new(out);
-    let mut seq = ser.serialize_seq(Some(rows.len())).unwrap(); // or None if unknown
+    let mut writer = incrementaljsonwriter::IncrementalJsonWriter::new(out);
     for row in rows {
         if row.detail == 8 { 
             panic!();
         }
-        seq.serialize_element(&row).unwrap();
+        writer.write_json(&row).unwrap();
     }
-    seq.end().unwrap();
 }
 #[derive(Serialize, Deserialize, Debug)]
 struct Record { 

@@ -14,7 +14,13 @@ impl<T: FileExt + Write + Seek> IncrementalJsonWriter<T> {
         }
     }
 
-    pub fn write_element_to_array<U: Serialize>(&mut self, element: &U) -> Result<()> {
+    pub fn write_json<U: Serialize>(&mut self, element: &U) -> Result<usize> {
+        self.write(serde_json::to_string_pretty(&element)?.as_bytes())
+    }
+}
+
+impl<T: FileExt + Write + Seek> Write for IncrementalJsonWriter<T> { 
+    fn write(&mut self, element: &[u8]) -> Result<usize> { 
         let mut current = self.buffer.seek(SeekFrom::Current(0))?;
         let mut bytes = vec![];
 
@@ -25,11 +31,14 @@ impl<T: FileExt + Write + Seek> IncrementalJsonWriter<T> {
             bytes.extend(b",\n");
         }
 
-        bytes.extend(serde_json::to_vec_pretty(element)?);
+        bytes.extend(element);
         bytes.push(b'\n');
         bytes.push(b']');
 
-        self.buffer.seek_write(&bytes, current - 2).map(|_| ())
+        self.buffer.seek_write(&bytes, current - 2)
+    }
+    fn flush(&mut self) -> Result<()> { 
+        self.buffer.flush()
     }
 }
 
@@ -58,7 +67,7 @@ fn writer_writes_square_brackets_to_buffer() {
     let mut reader = std::fs::File::open(path).unwrap();
     
     for row in rows.iter().take(2) { 
-        json_writer.write_element_to_array(&row).unwrap();
+        json_writer.write_json(&row).unwrap();
     }
     
     let mut buffer = String::new();
@@ -66,7 +75,7 @@ fn writer_writes_square_brackets_to_buffer() {
     assert_eq!(expect_one, buffer);
 
     for row in rows.iter().skip(2).take(2) { 
-        json_writer.write_element_to_array(&row).unwrap();
+        json_writer.write_json(&row).unwrap();
     }
     let mut buffer = String::new();
     reader.seek(SeekFrom::Start(0)).unwrap();
