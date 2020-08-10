@@ -8,7 +8,7 @@ Currently a work in progress and only supports Windows but linux support coming 
 IncrementalJsonWriter provides a writer that takes a File writer
 and incrementally writes JSON objects to an array inside that file using serde_json
 
-It implements the write trait's write(&[u8]) and flush() as well as write_json() which takes
+It implements the write trait's `write(&[u8])` and `flush()` as well as `write_json()` which takes
 any serialisable object and writes it to the underlying array.
 
 example: 
