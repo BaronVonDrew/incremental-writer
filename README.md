@@ -1,6 +1,6 @@
 # inc
 
-Is a library which provides writers to write in different formats to files on disk, currently 
+Inc is a library which provides writers to write in different formats to files on disk, currently 
 only JSON is supported. inc::json::IncrementalJsonWriter provides a writer that takes a File writer
 and incrementally writes JSON objects to an array inside that file using serde_json. 
 
