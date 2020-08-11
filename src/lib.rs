@@ -9,7 +9,7 @@
 //! example: 
 //! ```
 //! extern crate incrementaljson;
-//! use incrementaljson::incrementaljsonwriter;
+//! use incrementaljson::json;
 //! use serde::{Serialize, Deserialize};
 //!
 //! fn main() {
@@ -20,7 +20,7 @@
 //!
 //!     let out = std::fs::File::create("test.json").unwrap();
 //!
-//!     let mut writer = incrementaljsonwriter::IncrementalJsonWriter::new(out);
+//!     let mut writer = json::IncrementalJsonWriter::new(out);
 //!     for row in rows {
 //!         //the element is written to the file on each iteration
 //!         //if it stops before finishing, the JSON is still valid
@@ -34,4 +34,4 @@
 //! }
 //! ```
 
-pub mod incrementaljsonwriter;
+pub mod json;

@@ -1,5 +1,5 @@
-extern crate incrementaljson;
-use incrementaljson::incrementaljsonwriter;
+extern crate inc;
+use inc::json;
 use serde::{Serialize, Deserialize};
 
 fn main() {
@@ -10,7 +10,7 @@ fn main() {
 
     let out = std::fs::File::create("test.json").unwrap();
 
-    let mut writer = incrementaljsonwriter::IncrementalJsonWriter::new(out);
+    let mut writer = json::IncrementalJsonWriter::new(out);
     for row in rows {
         if row.detail == 8 { 
             panic!();
