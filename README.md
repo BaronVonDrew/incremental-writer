@@ -1,7 +1,7 @@
-# inc
+# incremental-writer
 
 Inc is a library which provides writers to write in different formats to files on disk, currently 
-only JSON is supported. inc::json::IncrementalJsonWriter provides a writer that takes a File writer
+only JSON is supported. incremental_writer::json::IncrementalJsonWriter provides a writer that takes a File writer
 and incrementally writes JSON objects to an array inside that file using serde_json. 
 
 It implements the write trait's write(&[u8]) and flush() as well as write_json() which takes
@@ -9,8 +9,8 @@ any serialisable object and writes it to the underlying array.
 
 example: 
     
-    extern crate inc;
-    use inc::json;
+    extern crate incremental_writer;
+    use incremental_writer::json;
     use serde::{Serialize, Deserialize};
         fn main() {
         let rows: Vec<Record> = vec![0, 1, 2, 3, 4, 5, 6, 7 , 8, 9, 10]

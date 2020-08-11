@@ -1,5 +1,5 @@
 [package]
-name = "inc"
+name = "incremental-writer"
 description = "A wrapper around a file writer that appends json objects to an array in a file"
 license = "MIT OR Apache-2.0"
 readme = "README.md"

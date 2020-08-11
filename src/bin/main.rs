@@ -1,5 +1,5 @@
-extern crate inc;
-use inc::json;
+extern crate incremental_writer;
+use incremental_writer::json;
 use serde::{Serialize, Deserialize};
 
 fn main() {
