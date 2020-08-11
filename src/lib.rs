@@ -1,6 +1,6 @@
 //! # incremental-writer
 //! 
-//! Is a library which provides writers to write in different formats to files on disk, currently 
+//! incremental-writer is a library which provides writers to write in different formats to files on disk, currently 
 //! only JSON is supported. incremental_writer::json::IncrementalJsonWriter provides a writer that takes a File writer
 //! and incrementally writes JSON objects to an array inside that file using serde_json. 
 //! 

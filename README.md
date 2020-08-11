@@ -1,8 +1,11 @@
 # incremental-writer
 
-Inc is a library which provides writers to write in different formats to files on disk, currently 
+incremental-writer is a library which provides writers to write in different formats to files on disk, currently 
 only JSON is supported. incremental_writer::json::IncrementalJsonWriter provides a writer that takes a File writer
 and incrementally writes JSON objects to an array inside that file using serde_json. 
+
+### Windows Only!### 
+Currently only windows is supported. This should be rectified very soon.
 
 It implements the write trait's write(&[u8]) and flush() as well as write_json() which takes
 any serialisable object and writes it to the underlying array.
