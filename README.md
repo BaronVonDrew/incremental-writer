@@ -8,7 +8,7 @@ It implements the write trait's write(&[u8]) and flush() as well as write_json()
 any serialisable object and writes it to the underlying array.
 
 example: 
-    ```
+    
     extern crate inc;
     use inc::json;
     use serde::{Serialize, Deserialize};
