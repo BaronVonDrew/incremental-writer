@@ -1,15 +1,16 @@
-//! # IncrementalJsonWriter
+//! # inc
 //! 
-//! IncrementalJsonWriter provides a writer that takes a File writer
-//! and incrementally writes JSON objects to an array inside that file using serde_json
+//! Is a library which provides writers to write in different formats to files on disk, currently 
+//! only JSON is supported. inc::json::IncrementalJsonWriter provides a writer that takes a File writer
+//! and incrementally writes JSON objects to an array inside that file using serde_json. 
 //! 
 //! It implements the write trait's write(&[u8]) and flush() as well as write_json() which takes
 //! any serialisable object and writes it to the underlying array.
 //! 
 //! example: 
 //! ```
-//! extern crate incrementaljson;
-//! use incrementaljson::json;
+//! extern crate inc;
+//! use inc::json;
 //! use serde::{Serialize, Deserialize};
 //!
 //! fn main() {
