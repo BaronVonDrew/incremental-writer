@@ -6,7 +6,7 @@ readme = "README.md"
 version = "0.1.0"
 authors = ["Drew Cunningham <atacunningham@users.noreply.github.com>"]
 edition = "2018"
-repository = "https://github.com/BaronVonDrew/inc"
+repository = "https://github.com/BaronVonDrew/incremental-writer.git"
 keywords = ["json", "file-writer", "rolling-file", "io"]
 categories = ["filesystem"]
 
