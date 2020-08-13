@@ -1,5 +1,9 @@
 use serde::{Serialize, Deserialize};
 use std::io::{Write, Seek, SeekFrom};
+
+#[cfg(unix)]
+use std::os::unix::fs::FileExt;
+#[cfg(windows)]
 use std::os::windows::fs::FileExt;
 
 type Result<T> = std::result::Result<T, std::io::Error>;
@@ -16,6 +20,16 @@ impl<T: FileExt + Write + Seek> IncrementalJsonWriter<T> {
 
     pub fn write_json<U: Serialize>(&mut self, element: &U) -> Result<usize> {
         self.write(serde_json::to_string_pretty(&element)?.as_bytes())
+    }
+    
+    #[cfg(unix)]
+    fn write_at_offset(&mut self, bytes: &[u8], offset: u64) -> Result<usize> {
+        let bytes_written = self.buffer.write_at(bytes, offset)?;
+        self.buffer.seek(SeekFrom::Current((bytes_written - 2) as i64)).map(|_| bytes_written)
+    }
+    #[cfg(windows)]
+    fn write_at_offset(&mut self, bytes: &[u8], offset: u64) -> Result<usize> {
+        self.buffer.seek_write(bytes, offset)
     }
 }
 
@@ -35,7 +49,11 @@ impl<T: FileExt + Write + Seek> Write for IncrementalJsonWriter<T> {
         bytes.push(b'\n');
         bytes.push(b']');
 
-        self.buffer.seek_write(&bytes, current - 2)
+        let written = self.write_at_offset(&bytes, current - 2)?;
+
+        let new_position = self.buffer.seek(SeekFrom::Current(0))?;
+        println!("Was: {}, now: {}, total: {}", current, new_position, current + bytes.len() as u64);
+        Ok(written)
     }
     fn flush(&mut self) -> Result<()> { 
         self.buffer.flush()
@@ -54,7 +72,7 @@ fn writer_writes_square_brackets_to_buffer() {
     \n{\n  \"name\": \"Test\",\n  \"detail\": 2\n},\
     \n{\n  \"name\": \"Test\",\n  \"detail\": 3\n}\n]");
 
-    let path = "testfile.json";
+    let path = "unittest.json";
     let rows: Vec<Record> = vec![0, 1, 2, 3]
         .iter()
         .map(|num| Record { name: String::from("Test"), detail: *num})

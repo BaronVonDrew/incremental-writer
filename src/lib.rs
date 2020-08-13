@@ -4,6 +4,8 @@
 //! only JSON is supported. incremental_writer::json::IncrementalJsonWriter provides a writer that takes a File writer
 //! and incrementally writes JSON objects to an array inside that file using serde_json. 
 //! 
+//! Works on both Windows and Unix.
+//! 
 //! It implements the write trait's write(&[u8]) and flush() as well as write_json() which takes
 //! any serialisable object and writes it to the underlying array.
 //! 
@@ -19,7 +21,7 @@
 //!         .map(|num| Record { name: String::from("Test"), detail: *num})
 //!         .collect();
 //!
-//!     let out = std::fs::File::create("test.json").unwrap();
+//!     let out = std::fs::File::create("docstest.json").unwrap();
 //!
 //!     let mut writer = json::IncrementalJsonWriter::new(out);
 //!     for row in rows {
@@ -34,5 +36,5 @@
 //!     detail: u32
 //! }
 //! ```
-#![doc(html_root_url = "https://docs.rs/incremental-writer/0.1.0")]
+#![doc(html_root_url = "https://docs.rs/incremental-writer/0.1.1")]
 pub mod json;
