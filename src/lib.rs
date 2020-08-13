@@ -36,5 +36,5 @@
 //!     detail: u32
 //! }
 //! ```
-#![doc(html_root_url = "https://docs.rs/incremental-writer/0.1.1")]
+#![doc(html_root_url = "https://docs.rs/incremental-writer/0.1.2")]
 pub mod json;
